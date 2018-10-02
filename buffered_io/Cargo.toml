@@ -1,0 +1,11 @@
+[package]
+name = "buffered_io"
+version = "0.1.0"
+authors = ["ShotaTakahashi <takahashi.s.be@m.titech.ac.jp>"]
+edition = "2018"
+
+[dependencies]
+bincode = "1.0.1"
+lockfile = "0.2.1"
+serde = "1.0.79"
+serde_derive = "1.0.79"
