@@ -1,4 +1,7 @@
 #![feature(mpsc_select)]
+extern crate libc;
+extern crate nix;
+
 use std::fs::File;
 use std::io::prelude::*;
 use std::io::SeekFrom;
@@ -7,9 +10,6 @@ use std::thread;
 use nix::sys::select;
 use nix::sys::time::{TimeValLike, TimeVal};
 use nix::poll::{EventFlags, PollFd, poll};
-
-extern crate libc;
-extern crate nix;
 
 const TIMEOUT: i64 = 5;
 

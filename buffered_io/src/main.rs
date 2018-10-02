@@ -1,15 +1,15 @@
+extern crate bincode;
+extern crate lockfile;
+#[macro_use]
+extern crate serde_derive;
+extern crate serde;
+
 use std::fs::File;
 use std::io::{BufRead, BufReader};
 use std::io::{Write, BufWriter};
 use lockfile::Lockfile;
 use std::path::Path;
 use std::io::{Seek, SeekFrom};
-
-extern crate bincode;
-extern crate lockfile;
-#[macro_use]
-extern crate serde_derive;
-extern crate serde;
 
 fn main() {
     let path = "test.txt";

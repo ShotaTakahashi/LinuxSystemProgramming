@@ -1,0 +1,8 @@
+[package]
+name = "advanced_file_io"
+version = "0.1.0"
+authors = ["ShotaTakahashi <takahashi.s.be@m.titech.ac.jp>"]
+edition = "2018"
+
+[dependencies]
+nix = "0.11.0"
