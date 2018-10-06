@@ -8,6 +8,14 @@ use nix::sys::wait::{WaitStatus, WaitPidFlag};
 use nix::sys::signal::Signal;
 use nix::unistd::Pid;
 
+use nix::unistd::{getuid, getgid, getsid, setsid};
+
+use nix::unistd::{chdir, close, dup, daemon};
+use std::os::raw::c_int;
+use nix::fcntl::open;
+use nix::fcntl::OFlag;
+use nix::sys::stat::Mode;
+
 fn main() {
     // pid
     println!("My pid={}", getpid());
@@ -55,7 +63,31 @@ fn main() {
         }
     }
 
-    my_system(CString::new("help").unwrap());
+    //my_system(CString::new("help").unwrap());
+
+    println!("user id={:?}, group id={:?}", getuid(), getgid());
+
+    let pid = fork();
+
+    match setsid() {
+        Ok(sid) => println!("pid={:?}, getsid={:?}", sid, getsid(Some(sid))),
+        Err(_) => eprintln!("setsid")
+    }
+
+    match chdir("/") {
+        Ok(_) => println!("Change"),
+        Err(_) => eprintln!("chdir")
+    }
+    for i in 0..1024 {
+        close(i as c_int).unwrap();
+    }
+
+    open("/dev/null", OFlag::O_RDWR, Mode::S_IRWXU).unwrap();
+    dup(0).unwrap();
+    dup(0).unwrap();
+
+    daemon(false, false).unwrap();
+
 }
 
 fn exec_sample(path: &CString) {
@@ -65,7 +97,7 @@ fn exec_sample(path: &CString) {
 }
 
 fn my_system(cmd: CString) {
-    let pid = fork().unwrap();
+    let _pid = fork().unwrap();
 
     let argv = [
         CString::new("sh").unwrap(),
@@ -74,5 +106,5 @@ fn my_system(cmd: CString) {
         CString::new("").unwrap(),
     ];
     let sh = CString::new("/bin/sh").unwrap();
-    let ret = execv(&sh, &argv).unwrap();
+    let _ret = execv(&sh, &argv).unwrap();
 }
