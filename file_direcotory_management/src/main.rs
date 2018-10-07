@@ -6,6 +6,9 @@ use nix::sys::stat::stat;
 
 use std::fs::*;
 
+use nix::unistd::{getcwd, chdir, mkdir};
+use nix::sys::stat::Mode;
+
 fn main() {
     let args: Vec<String> = args().collect();
 
@@ -26,4 +29,12 @@ fn main() {
     let mut perms = metadata("test.txt").unwrap().permissions();
     perms.set_readonly(true);
     set_permissions("test.txt", perms).unwrap();
+
+    println!("cwd = {:?}", getcwd().unwrap());
+
+    mkdir("some_dir", Mode::S_IRWXU).unwrap();
+    chdir("some_dir").unwrap();
+    println!("cwd = {:?}", getcwd().unwrap());
+    chdir("..").unwrap();
+    remove_dir("some_dir").unwrap();
 }
